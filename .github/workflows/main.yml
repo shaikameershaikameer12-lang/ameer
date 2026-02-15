@@ -1,32 +1,36 @@
-name: Deploy and Rollback
+name: CI Workflow
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Simulate deployment
-        run: echo "Deploying site..."
-
-      - name: Simulate failure check
-        run: exit 1
-
-  rollback:
-    needs: deploy
-    if: failure()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout previous commit
-        uses: actions/checkout@v3
+      # Step 2: Set up Node.js (example, adjust if needed)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          ref: HEAD~1
+          node-version: '18'
 
-      - name: Rollback message
-        run: echo "Rollback to previous version"
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run tests (if any)
+      - name: Run tests
+        run: npm test
+
+      # Step 5: Build project (optional)
+      - name: Build project
+        run: npm run build
