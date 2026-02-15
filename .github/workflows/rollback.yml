@@ -1,32 +1,21 @@
-name: Deploy and Rollback
+name: Rollback Workflow
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:   # manual trigger only
 
 jobs:
-  deploy:
+  rollback:
     runs-on: ubuntu-latest
+
     steps:
+      # Step 1: Checkout code (previous commit later)
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Simulate deployment
-        run: echo "Deploying site..."
-
-      - name: Simulate failure check
-        run: exit 1
-
-  rollback:
-    needs: deploy
-    if: failure()
-    runs-on: ubuntu-latest
-    steps:
+      # Step 2: Checkout previous commit manually
       - name: Checkout previous commit
-        uses: actions/checkout@v3
-        with:
-          ref: HEAD~1
+        run: git checkout HEAD~1
 
-      - name: Rollback message
-        run: echo "Rollback to previous version"
+      # Step 3: Any rollback commands (example)
+      - name: Deploy rollback
+        run: echo "Rollback steps here"
