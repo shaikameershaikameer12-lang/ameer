@@ -1,0 +1,32 @@
+name: Deploy and Rollback
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Simulate deployment
+        run: echo "Deploying site..."
+
+      - name: Simulate failure check
+        run: exit 1
+
+  rollback:
+    needs: deploy
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout previous commit
+        uses: actions/checkout@v3
+        with:
+          ref: HEAD~1
+
+      - name: Rollback message
+        run: echo "Rollback to previous version"
