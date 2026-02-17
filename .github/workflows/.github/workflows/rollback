@@ -1,0 +1,32 @@
+name: Deploy and Rollback Automation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy Application
+        run: |
+          echo "Deploying application..."
+          # Mee deployment command ikkada rayandi
+          # Example: npm install && npm run build
+
+      - name: Check Deployment Status
+        run: |
+          echo "Checking deployment..."
+          # Fail simulate cheyadaniki uncomment cheyandi
+          # exit 1
+
+      - name: Rollback if Failed
+        if: failure()
+        run: |
+          echo "Deployment failed. Rolling back..."
+          git revert HEAD
